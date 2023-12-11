@@ -71,6 +71,11 @@ class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
@@ -93,7 +98,11 @@ class LoginUserSerializer(serializers.Serializer):
             raise serializers.ValidationError('User is not active.')
 
         return data
-
+    
+class GetUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
         
 

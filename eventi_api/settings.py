@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from datetime import timedelta
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-sf3y7h-@(5553_d018s^ijj(y-yem@lxdg=y!#g#2vu&8-y6+h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.168.1.181",'127.0.0.1' ]
 
 
 # Application definition
@@ -44,11 +45,26 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'channels',
+    # 'auth_firebase.apps.AuthFirebaseConfig',
     
     # Local apps   
     'chatapp',
     'authentication',
+    "django_twilio"
+    
 ]
+
+"""FIREBASE CREDENTIALS"""
+# FIREBASE_ACCOUNT_TYPE = os.environ.get('FIREBASE_ACCOUNT_TYPE')
+# FIREBASE_PROJECT_ID = os.environ.get('FIREBASE_PROJECT_ID')
+# FIREBASE_PRIVATE_KEY_ID = os.environ.get('FIREBASE_PRIVATE_KEY_ID')
+# FIREBASE_PRIVATE_KEY = os.environ.get('FIREBASE_PRIVATE_KEY')
+# FIREBASE_CLIENT_EMAIL = os.environ.get('FIREBASE_CLIENT_EMAIL')
+# FIREBASE_CLIENT_ID = os.environ.get('FIREBASE_CLIENT_ID')
+# FIREBASE_AUTH_URI = os.environ.get('FIREBASE_AUTH_URI')
+# FIREBASE_TOKEN_URI = os.environ.get('FIREBASE_TOKEN_URI')
+# FIREBASE_AUTH_PROVIDER_X509_CERT_URL = os.environ.get('FIREBASE_AUTH_PROVIDER_X509_CERT_URL')
+# FIREBASE_CLIENT_X509_CERT_URL = os.environ.get('FIREBASE_CLIENT_X509_CERT_URL')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Dar_es_Salaam'
 
 USE_I18N = True
 
@@ -191,4 +207,11 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'authentication.User'
+
+ACCOUNT_SID='AC3e38c3dadb353c325ac256a05b74597d'
+AUTH_TOKEN='d67f75856ddf0d006062633665866284'
+COUNTRY_CODE='+255'
+TWILIO_WHATSAPP_NUMBER='whatsapp:+255744315516'
+TWILIO_PHONE_NUMBER='+12023350833'
+
 
