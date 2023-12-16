@@ -24,11 +24,6 @@ from datetime import datetime
 from rest_framework.exceptions import ValidationError
 from datetime import timedelta
 from django.utils import timezone
-import pytz
-
-
-
-
 
 client = vonage.Client(key="d4ed6a01", secret="2DLWoByfIAizn1QM_")
 sms = vonage.Sms(client)
