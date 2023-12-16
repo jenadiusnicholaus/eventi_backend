@@ -102,7 +102,7 @@ class LoginUserSerializer(serializers.Serializer):
 class GetUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['user_uid', 'username', 'profile_picture', 'email_id', 'name', 'about_me', 'phone_number', 'created_at', 'updated_at', 'is_verified', 'is_active', 'is_staff', 'is_admin']
 
         
 
