@@ -27,5 +27,6 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path('', include('friends.urls')),
     path('api/v1/chat/', include('chatapp.urls')),
-    path('api/v1/authentication/', include('authentication.urls'))
+    path('api/v1/authentication/', include('authentication.urls')),
+     path('api/v1/eventi-group/', include('eventi_group.urls'))
 ]

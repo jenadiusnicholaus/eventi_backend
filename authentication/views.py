@@ -52,6 +52,22 @@ class GenerateOTP(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginUserSerializer
 
+    def create_otp(self, complete_phone_number, user):
+        keygen = GenerateKey()
+        key = base64.b32encode(keygen.returnValue(complete_phone_number).encode())  # Key is generated
+        OTP = pyotp.TOTP(key,interval = EXPIRY_TIME, digits=6)  # TOTP Model for OTP is created
+        user.otp_created_at = timezone.localtime(timezone.now())
+        user.save()  # Save the data
+
+        user.otp=OTP.now() # user Newly created Model
+        user.is_verified = False
+        user.save()  # Save the data
+
+        # MessageHandler.send_otp_via_message(phone_number, OTP.now())
+        # Using Multi-Threading send the OTP Using Messaging Services like Twilio or Fast2sms
+        return Response({'massege':f" An OTP ({OTP.now()}) is Sent to your phone Number"}, status=200)
+
+
     def post(self, request):
      
 
@@ -64,23 +80,12 @@ class GenerateOTP(APIView):
 
             if is_otp_valid(otp_created_at=user.otp_created_at,EXPIRY_TIME=EXPIRY_TIME) == True and user.is_verified == False:
                 return Response({"message":"Please verify you OTP is still Valid"}, status=400)
-            if user.is_verified == True:
+            if user.is_verified == True and is_otp_valid(otp_created_at=user.otp_created_at,EXPIRY_TIME=EXPIRY_TIME) == True:
                 return Response({"message":"User is already verified"}, status=400)
+            return self.create_otp(complete_phone_number, user)
        
         else:
-            keygen = GenerateKey()
-            key = base64.b32encode(keygen.returnValue(complete_phone_number).encode())  # Key is generated
-            OTP = pyotp.TOTP(key,interval = EXPIRY_TIME, digits=6)  # TOTP Model for OTP is created
-            user.otp_created_at = timezone.localtime(timezone.now())
-            user.save()  # Save the data
-
-            user.otp=OTP.now() # user Newly created Model
-            user.is_verified = False
-            user.save()  # Save the data
-
-            # MessageHandler.send_otp_via_message(phone_number, OTP.now())
-            # Using Multi-Threading send the OTP Using Messaging Services like Twilio or Fast2sms
-            return Response({'massege':f" An OTP ({OTP.now()}) is Sent to your phone Number"}, status=200)
+            return self.create_otp(complete_phone_number, user)
        
        
 def is_otp_valid(otp_created_at, EXPIRY_TIME):
@@ -102,6 +107,7 @@ def is_otp_valid(otp_created_at, EXPIRY_TIME):
 
 # accounts/views.p
 class ValidateOTP(APIView):
+    permission_classes = (AllowAny,)
     def post(self, request):
         phone_number = request.data.get('phone_number', '')
         otp = request.data.get('otp_code', '')
